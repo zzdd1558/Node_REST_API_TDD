@@ -1,0 +1,24 @@
+{
+  "name": "basic_node_tdd_refactoring",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ./api/user/user.spec.js",
+    "start": "supervisor ./index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "expect": "^22.4.3",
+    "express": "^4.16.3",
+    "mocha": "^5.1.1",
+    "morgan": "^1.9.0",
+    "should": "^13.2.1",
+    "supertest": "^3.0.0",
+    "supervisor": "^0.12.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2"
+  },
+  "description": ""
+}
