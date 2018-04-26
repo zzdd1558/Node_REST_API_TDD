@@ -1,101 +1,21 @@
 const express = require('express');
-const router= express.Router();
-
-let users = [
-    {
-        "id": 1,
-        "name": "Chris"
-    },
-    {
-        "id": 2,
-        "name": "James"
-    },
-    {
-        "id": 3,
-        "name": "Peter"
-    },
-    {
-        "id": 4,
-        "name": "Elice"
-    }
-];
+const router = express.Router();
+const user_ctrl = require('./user.ctrl');
 
 
-// GET 방식을 통해 모든 user를 조회.
-router.get('/', (req, res) => {
-    res.json(users);
-});
+// GET - 모든 user를 조회.
+router.get('/', user_ctrl.index);
 
+// GET - 해당 id 에 해당하는 값 조회
+router.get('/:id', user_ctrl.show);
 
-router.get('/:id', (req, res) => {
-    const id = parseInt(req.params.id, 10);
+// POST - 넘어온 값으로 해당 데이터 추가
+router.post('/', user_ctrl.create);
 
-    // id값이 numer가 아닐경우 400 Error return
-    if (Number.isNaN(id)) {
-        return res.status(400).end();
-    }
+// PUT - 해당 id 에 해당하는 값의 name 을 update
+router.put('/:id', user_ctrl.update);
 
-    const result = users.filter(data => data.id == id)[0];
-    if (!result) {
-        return res.status(404).end();
-    } else {
-        res.status(200).send(result);
-    }
-});
-
-router.post('/', (req, res) => {
-    const id = parseInt(req.body.id, 10);
-    const name = req.body.name;
-
-    if (!name) {
-        return res.status(400).end();
-    }
-
-    const found = users.filter(data => data.name === name).length;
-
-    if (found) {
-        return res.status(409).end();
-    }
-
-    let userData = {id, name};
-    users.push(userData);
-    res.status(201).json(userData);
-
-});
-
-router.put('/:id', (req, res) => {
-
-    const url_id = parseInt(req.params.id, 10);
-    if (Number.isNaN(url_id)) return res.status(400).end();
-
-    const name = req.body.name;
-    if (!name) return res.status(400).end();
-
-    const id = parseInt(req.body.id, 10);
-
-
-    const result = users.filter(data => data.id === id).length;
-    if (result <= 0) {
-        return res.status(404).end();
-    }
-
-    const confirmName = users.filter(data => data.name == name).length;
-    if (confirmName) return res.status(409).end();
-
-});
-
-router.delete('/:id', (req, res) => {
-
-    const id = parseInt(req.params.id, 10);
-
-    if (Number.isNaN(id)) {
-        return res.status(400).send();
-    }
-
-    users = users.filter(data => data.id !== id);
-    res.status(204).end();
-});
-
-
+// DELETE - 해당 id를 가지고 있는데이터 삭제
+router.delete('/:id', user_ctrl.destroy);
 
 module.exports = router;
